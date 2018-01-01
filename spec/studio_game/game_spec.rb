@@ -1,21 +1,21 @@
-require_relative 'game'
-require_relative 'die'
-require_relative 'game_turn'
+require'studio_game/game'
+
 require 'rspec'
 
+
+module StudioGame
 describe Game do
 
   before do
     @game = Game.new("Knuckleheads")
-
     @initial_health = 100
     @player = Player.new("moe", @initial_health)
-
     @game.add_player(@player)
+
   end
 
-  it "w00ts the player if a high number is rolled" do
-    Die.any_instance.stub(:roll).and_return(5)
+  it "woots the player if a high number is rolled" do
+    Die.any_instance.stub(:roll).and_return(10)
 
     @game.play(2)
 
@@ -35,7 +35,12 @@ describe Game do
 
     @game.play(2)
 
-    @player.health.should == @initial_health - (5 * 2)
+    @player.health.should == @initial_health - (10 * 2)
   end
 
+  it "assigns a treasure for points during a player's turn" do
+    @game.play(1)
+    @player.points.should_not be_zero
+  end
+end
 end
